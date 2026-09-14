@@ -359,12 +359,14 @@ mkdir src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.FacadeLib\Queries\Interfaces 2
 REM ApplicationLib
 mkdir src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.ApplicationLib\Handlers 2>nul
 mkdir src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.ApplicationLib\Repositories 2>nul
+mkdir src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.ApplicationLib\Extensions 2>nul
 
 REM InfrastructureLib
 mkdir src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.InfrastructureLib\Persistence 2>nul
 mkdir src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.InfrastructureLib\Persistence\EF_Configurations 2>nul
 mkdir src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.InfrastructureLib\Repositories 2>nul
 mkdir src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.InfrastructureLib\QueryHandlers 2>nul
+mkdir src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.InfrastructureLib\Extensions 2>nul
 exit /b
 
 :AddInitialFolderStructure
@@ -492,6 +494,12 @@ echo namespace %MICROSERVICE_NAME%.ApplicationLib.Repositories;
 echo.
 echo // Placeholder - erstattes med faktisk kode
 ) > src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.ApplicationLib\Repositories\dummy.cs
+(
+echo namespace %MICROSERVICE_NAME%.ApplicationLib.Repositories;
+echo.
+echo // Placeholder - erstattes med faktisk kode
+) > src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.ApplicationLib\Extensions\dummy.cs
+
 
 REM InfrastructureLib
 (
@@ -509,6 +517,11 @@ echo namespace %MICROSERVICE_NAME%.InfrastructureLib.QueryHandlers;
 echo.
 echo // Placeholder - erstattes med faktisk kode
 ) > src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.InfrastructureLib\QueryHandlers\dummy.cs
+(
+echo namespace %MICROSERVICE_NAME%.InfrastructureLib.QueryHandlers;
+echo.
+echo // Placeholder - erstattes med faktisk kode
+) > src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.InfrastructureLib\Extensions\dummy.cs
 
 REM DomainLib.Tests
 (
