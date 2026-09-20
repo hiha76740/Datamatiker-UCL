@@ -337,6 +337,9 @@ dotnet add src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.Api\%MICROSERVICE_NAME%.A
 
 REM Tests: xunit3-template giver allerede xunit.v3 — tilfoej kun Moq til Application.Tests
 dotnet add tests\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.ApplicationLib.Tests\%MICROSERVICE_NAME%.ApplicationLib.Tests.csproj package Moq
+
+REM Blazor: Radzen
+dotnet add src\%PROJ_NAME%.Web\%PROJ_NAME%.Web.csproj package Radzen.Blazor
 exit /b
 
 :AddMicroServiceFolderStructure
@@ -711,6 +714,9 @@ dotnet add src\%PROJ_NAME%.Api\%PROJ_NAME%.Api.csproj package Scalar.AspNetCore
 
 REM Tests: xunit3-template giver allerede xunit.v3 — tilfoej kun Moq til Application.Tests
 dotnet add tests\%PROJ_NAME%.ApplicationLib.Tests\%PROJ_NAME%.ApplicationLib.Tests.csproj package Moq
+
+REM Blazor: Radzen
+dotnet add src\%PROJ_NAME%.Web\%PROJ_NAME%.Web.csproj package Radzen.Blazor
 exit /b
 
 
