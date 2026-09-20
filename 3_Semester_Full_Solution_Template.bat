@@ -141,8 +141,8 @@ REM ============================================================================
 :CreateMicroServiceBlazorProject
 echo Blazor (Blazor Webassembly ingen afhaengigheder)
 dotnet new 	blazorwasm -n %PROJ_NAME%.Web -o src\%PROJ_NAME%.Web -f net10.0 -p true
-del src\%PROJ_NAME%.Web\Components\Pages\Weather.razor 2>nul
-del src\%PROJ_NAME%.Web\Components\Pages\Counter.razor 2>nul
+del src\%PROJ_NAME%.Web\Pages\Weather.razor 2>nul
+del src\%PROJ_NAME%.Web\Pages\Counter.razor 2>nul
 exit /b
 
 :CreateMicroServiceBlazorTests
@@ -619,8 +619,8 @@ exit /b
 :CreateMonolitBlazorWASMProject
 echo [5/9] Blazor (Blazor Webassembly ingen afhaengigheder)
 dotnet new 	blazorwasm -n %PROJ_NAME%.Web -o src\%PROJ_NAME%.Web -f net10.0 -p true
-del src\%PROJ_NAME%.Web\Components\Pages\Weather.razor 2>nul
-del src\%PROJ_NAME%.Web\Components\Pages\Counter.razor 2>nul
+del src\%PROJ_NAME%.Web\Pages\Weather.razor 2>nul
+del src\%PROJ_NAME%.Web\Pages\Counter.razor 2>nul
 exit /b
 
 :CreateMonolitApiProject
