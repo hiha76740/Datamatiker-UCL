@@ -139,7 +139,7 @@ REM MicroService
 REM =================================================================================================================================================
 
 :CreateMicroServiceBlazorProject
-echo Blazor (Blazor Webassembly ingen afhaengigheder)
+echo Blazor (Blazor Webassembly refererer Contracts)
 dotnet new 	blazorwasm -n %PROJ_NAME%.Web -o src\%PROJ_NAME%.Web -f net10.0 -p true
 del src\%PROJ_NAME%.Web\Pages\Weather.razor 2>nul
 del src\%PROJ_NAME%.Web\Pages\Counter.razor 2>nul
@@ -263,6 +263,9 @@ echo Opsaetter initial projekt-referencer (Dependency Rule)...
 
 REM Blazor.Tests -> Blazor Web
 dotnet add tests\%PROJ_NAME%.Web.Tests\%PROJ_NAME%.Web.Tests.csproj reference src\%PROJ_NAME%.Web\%PROJ_NAME%.Web.csproj
+
+REM Blazor Web -> Shared Contracts
+dotnet add src\%PROJ_NAME%.Web\%PROJ_NAME%.Web.csproj reference src\Shared\%PROJ_NAME%.ContractsLib\%PROJ_NAME%.ContractsLib.csproj
 exit /b
 
 :AddMicroServiceProjectsReferences
