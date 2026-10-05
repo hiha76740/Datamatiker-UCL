@@ -29,6 +29,7 @@ if %MICROSERVICE%==1 (
 	call :CreateMicroServiceSharedKernelLib
 	call :CreateMicroServiceBuildingBlocksLib
 	call :CreateMicroServiceContractsLib
+	call :CreateMicroServiceYarpProject
 	call :AddInitialProjectsToSolution
 	call :AddInitialProjectReferences
 	call :AddInitialFolderStructure
@@ -153,6 +154,11 @@ del tests\%PROJ_NAME%.Web.Tests\CounterCSharpTest.cs 2>nul
 del tests\%PROJ_NAME%.Web.Tests\CounterRazorTests.razor 2>nul
 exit /b
 
+:CreateMicroServiceYarpProject
+echo Reverse proxy project
+dotnet new web -n %PROJ_NAME%.Yarp -o src\Proxy\%PROJ_NAME%.Yarp -f net10.0
+exit /b
+
 :CreateMicroServiceSharedKernelLib
 echo SharedKernelLib (classlib - refererer Api + Application + Domain + Infrastructure)
 dotnet new classlib -n %PROJ_NAME%.SharedKernelLib -o src\Shared\%PROJ_NAME%.SharedKernelLib -f net10.0
@@ -242,6 +248,7 @@ dotnet sln add src\Shared\%PROJ_NAME%.SharedKernelLib\%PROJ_NAME%.SharedKernelLi
 dotnet sln add src\Shared\%PROJ_NAME%.BuildingBlocksLib\%PROJ_NAME%.BuildingBlocksLib.csproj
 dotnet sln add src\Shared\%PROJ_NAME%.ContractsLib\%PROJ_NAME%.ContractsLib.csproj
 dotnet sln add tests\%PROJ_NAME%.Web.Tests\%PROJ_NAME%.Web.Tests.csproj
+dotnet sln add src\Proxy\%PROJ_NAME%.Yarp\%PROJ_NAME%.Yarp.csproj
 exit /b
 
 :AddMicroServiceProjectsToSolution
@@ -343,6 +350,9 @@ dotnet add tests\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.ApplicationLib.Tests\%M
 
 REM Blazor: Radzen
 dotnet add src\%PROJ_NAME%.Web\%PROJ_NAME%.Web.csproj package Radzen.Blazor
+
+REM Reverse proxy project
+dotnet add src\Proxy\%PROJ_NAME%.Yarp\%PROJ_NAME%.Yarp.csproj package Yarp.ReverseProxy
 exit /b
 
 :AddMicroServiceFolderStructure
@@ -903,7 +913,8 @@ echo  Struktur:
 echo    src\Shared\%PROJ_NAME%.SharedKernelLib\               ^(ingen afhaengigheder^)
 echo    src\Shared\%PROJ_NAME%.BuildingBlocksLib\             ^(ingen afhaengigheder^)
 echo    src\Shared\%PROJ_NAME%.ContractsLib\                  ^(ingen afhaengigheder^)
-echo    src\%PROJ_NAME%.Web\                                  ^(ingen afhaengigheder^)
+echo    src\%PROJ_NAME%.Web\                                  ^(refererer Contracts^)
+echo	src\Proxy\%PROJ_NAME%.Yarp							  ^(ingen afhaengigheder^)
 echo.
 echo.
 echo  Starter-filer:
