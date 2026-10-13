@@ -24,6 +24,7 @@ call :CreateSolution
 
 echo.
 if %MICROSERVICE%==1 (
+	call :AskForAspireSupport
     call :CreateMicroServiceBlazorProject
 	call :CreateMicroServiceBlazorTests
 	call :CreateMicroServiceSharedKernelLib
@@ -91,6 +92,27 @@ if errorlevel 2 (
     set MICROSERVICE=1
     call :AskServiceName
 )
+exit /b
+
+:AskForAspireSupport
+choice /C JN /M "Skal der tilfojes aspire support"
+
+if errorlevel 2 (
+	set ASPIRESUPPORT=0
+) else (
+	set ASPIRESUPPORT=1
+    call :AddAspire
+)
+exit /b
+
+:AddAspire
+REM === Aspire support ===
+
+echo Tilfojer Aspire
+aspire init --language csharp --suppress-agent-init
+dotnet new aspire-servicedefaults -n %PROJ_NAME%.ServiceDefaults
+dotnet sln add %PROJ_NAME%.AppHost/%PROJ_NAME%.AppHost.csproj
+dotnet sln add %PROJ_NAME%.ServiceDefaults/%PROJ_NAME%.ServiceDefaults.csproj
 exit /b
 
 
@@ -328,6 +350,13 @@ dotnet add src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.ApplicationLib\%MICROSERV
 REM Infrastructure -> Contracts
 dotnet add src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.InfrastructureLib\%MICROSERVICE_NAME%.InfrastructureLib.csproj reference src\Shared\%PROJ_NAME%.ContractsLib\%PROJ_NAME%.ContractsLib.csproj
 
+if %ASPIRESUPPORT%==1 (
+REM HostApp -> Api
+dotnet add %PROJ_NAME%.AppHost\%PROJ_NAME%.AppHost.csproj reference src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.Api\%MICROSERVICE_NAME%.Api.csproj
+
+REM Api -> servicedefaults
+dotnet add src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.Api\%MICROSERVICE_NAME%.Api.csproj reference %PROJ_NAME%.ServiceDefaults\%PROJ_NAME%.ServiceDefaults.csproj
+)
 exit /b
 
 
@@ -342,7 +371,7 @@ dotnet add src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.InfrastructureLib\%MICROS
 
 REM Api: OpenApi + Scalar
 dotnet add src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.Api\%MICROSERVICE_NAME%.Api.csproj package Microsoft.AspNetCore.OpenApi
-dotnet add src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.Api\%MICROSERVICE_NAME%.Api.csproj package Microsoft.OpenApi -v 2.11.0
+dotnet add src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.Api\%MICROSERVICE_NAME%.Api.csproj package Microsoft.OpenApi -v 2.12.0
 dotnet add src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.Api\%MICROSERVICE_NAME%.Api.csproj package Scalar.AspNetCore
 
 REM Tests: xunit3-template giver allerede xunit.v3 — tilfoej kun Moq til Application.Tests
@@ -598,6 +627,9 @@ if errorlevel 2 (
     call :AskServiceName
     goto :CreateMicroService
 )
+exit /b
+
+
 
 
 REM ================================================================================================================================================
@@ -722,7 +754,7 @@ dotnet add src\%PROJ_NAME%.InfrastructureLib\%PROJ_NAME%.InfrastructureLib.cspro
 
 REM Api: OpenApi + Scalar
 dotnet add src\%PROJ_NAME%.Api\%PROJ_NAME%.Api.csproj package Microsoft.AspNetCore.OpenApi
-dotnet add src\%PROJ_NAME%.Api\%PROJ_NAME%.Api.csproj package Microsoft.OpenApi -v 2.11.0
+dotnet add src\%PROJ_NAME%.Api\%PROJ_NAME%.Api.csproj package Microsoft.OpenApi -v 2.12.0
 dotnet add src\%PROJ_NAME%.Api\%PROJ_NAME%.Api.csproj package Scalar.AspNetCore
 
 REM Tests: xunit3-template giver allerede xunit.v3 — tilfoej kun Moq til Application.Tests
@@ -948,8 +980,10 @@ echo    1. Aaben %PROJ_NAME%.slnx i Visual Studio
 echo    2. Implementer dine Value Objects i %MICROSERVICE_NAME%\Domain\ValueObjects\
 echo    3. Implementer dine AggregateRoot og Entities i %MICROSERVICE_NAME%\Domain\Entities\
 echo    4. Indsaet reference til scalar i %MICROSERVICE_NAME%.Api\program.cs (app.MapScalarApiReference();)
-echo    5. Hvis Aspire onskes skal dette tilfojes via Aspire Orchestrator Support i Visual Studio
-echo    6. Opret multi startup profil hvis dette onskes
+echo    5. Opret multi startup profil hvis dette onskes
+if %ASPIRESUPPORT%==1 (
+echo    6. Indsaet reference til Api i Aspire AppHost
+)		
 echo.
 exit /b
 
