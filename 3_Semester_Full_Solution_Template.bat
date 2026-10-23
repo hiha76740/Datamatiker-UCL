@@ -12,7 +12,18 @@ REM ============================================================================
 
 echo.
 echo ============================================
-echo  Clean Architecture : Projekt-skelet
+echo  Clean Architecture : Solution-template
+echo ============================================
+echo.
+echo ============================================
+echo Folgende skal vaere installeret:
+echo.
+
+echo 1. Dotnet CLI
+echo 2. xunitv3 templates
+echo 3. bunit templates
+echo 4. Aspire CLI
+echo 5. Dapr
 echo ============================================
 echo.
 
@@ -25,6 +36,7 @@ call :CreateSolution
 echo.
 if %MICROSERVICE%==1 (
 	call :AskForAspireSupport
+	call :AskForDaprSupport
     call :CreateMicroServiceBlazorProject
 	call :CreateMicroServiceBlazorTests
 	call :CreateMicroServiceSharedKernelLib
@@ -33,6 +45,7 @@ if %MICROSERVICE%==1 (
 	call :CreateMicroServiceYarpProject
 	call :AddInitialProjectsToSolution
 	call :AddInitialProjectReferences
+	call :AddInitialProjectNuGetPackages
 	call :AddInitialFolderStructure
 	call :AddInitialDummyFiles
 	call :ShowInitialProjectOverview
@@ -113,6 +126,16 @@ aspire init --language csharp --suppress-agent-init
 dotnet new aspire-servicedefaults -n %PROJ_NAME%.ServiceDefaults
 dotnet sln add %PROJ_NAME%.AppHost/%PROJ_NAME%.AppHost.csproj
 dotnet sln add %PROJ_NAME%.ServiceDefaults/%PROJ_NAME%.ServiceDefaults.csproj
+exit /b
+
+:AskForDaprSupport
+choice /C JN /M "Skal der tilfojes dapr support"
+
+if errorlevel 2 (
+	set DAPRSUPPORT=0
+) else (
+	set DAPRSUPPORT=1
+)
 exit /b
 
 
@@ -297,6 +320,28 @@ REM Blazor Web -> Shared Contracts
 dotnet add src\%PROJ_NAME%.Web\%PROJ_NAME%.Web.csproj reference src\Shared\%PROJ_NAME%.ContractsLib\%PROJ_NAME%.ContractsLib.csproj
 exit /b
 
+
+:AddInitialProjectNuGetPackages
+echo.
+echo Installerer Initial NuGet-pakker...
+
+REM Blazor: Radzen
+dotnet add src\%PROJ_NAME%.Web\%PROJ_NAME%.Web.csproj package Radzen.Blazor
+
+REM Reverse proxy project
+dotnet add src\Proxy\%PROJ_NAME%.Yarp\%PROJ_NAME%.Yarp.csproj package Yarp.ReverseProxy
+
+REM Aspire AppHost project
+if %ASPIRESUPPORT%==1 (
+dotnet add %PROJ_NAME%.AppHost\%PROJ_NAME%.AppHost.csproj package Aspire.Hosting.SqlServer
+
+if %DAPRSUPPORT%==1 (
+dotnet add %PROJ_NAME%.AppHost\%PROJ_NAME%.AppHost.csproj package CommunityToolkit.Aspire.Hosting.Dapr
+)
+)
+
+exit /b
+
 :AddMicroServiceProjectsReferences
 echo.
 echo Opsaetter projekt-referencer (Dependency Rule)...
@@ -362,26 +407,30 @@ exit /b
 
 :AddMicroServiceNuGetPackages
 echo.
-echo Installerer Entiry Framework NuGet-pakker...
+echo Installerer NuGet-pakker...
 
-REM Infrastructure: EF Core 10
+REM Infrastructure: EF Core 10 + Dapr hvis ønsket
 dotnet add src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.InfrastructureLib\%MICROSERVICE_NAME%.InfrastructureLib.csproj package Microsoft.EntityFrameworkCore
 dotnet add src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.InfrastructureLib\%MICROSERVICE_NAME%.InfrastructureLib.csproj package Microsoft.EntityFrameworkCore.SqlServer
 dotnet add src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.InfrastructureLib\%MICROSERVICE_NAME%.InfrastructureLib.csproj package Microsoft.EntityFrameworkCore.Tools
+if %DAPRSUPPORT%==1 (
+dotnet add src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.InfrastructureLib\%MICROSERVICE_NAME%.InfrastructureLib.csproj package Dapr.AspNetCore
+)
 
-REM Api: OpenApi + Scalar
+
+REM Api: OpenApi + Scalar + EF Core Design + Dapr hvis ønsket
 dotnet add src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.Api\%MICROSERVICE_NAME%.Api.csproj package Microsoft.AspNetCore.OpenApi
-dotnet add src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.Api\%MICROSERVICE_NAME%.Api.csproj package Microsoft.OpenApi -v 2.12.0
+dotnet add src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.Api\%MICROSERVICE_NAME%.Api.csproj package Microsoft.OpenApi -v 2.13.0
 dotnet add src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.Api\%MICROSERVICE_NAME%.Api.csproj package Scalar.AspNetCore
+dotnet add src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.Api\%MICROSERVICE_NAME%.Api.csproj package Microsoft.EntityFrameworkCore.Design
+if %DAPRSUPPORT%==1 (
+dotnet add src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.Api\%MICROSERVICE_NAME%.Api.csproj package Dapr.AspNetCore
+)
 
 REM Tests: xunit3-template giver allerede xunit.v3 — tilfoej kun Moq til Application.Tests
 dotnet add tests\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.ApplicationLib.Tests\%MICROSERVICE_NAME%.ApplicationLib.Tests.csproj package Moq
 
-REM Blazor: Radzen
-dotnet add src\%PROJ_NAME%.Web\%PROJ_NAME%.Web.csproj package Radzen.Blazor
 
-REM Reverse proxy project
-dotnet add src\Proxy\%PROJ_NAME%.Yarp\%PROJ_NAME%.Yarp.csproj package Yarp.ReverseProxy
 exit /b
 
 :AddMicroServiceFolderStructure
@@ -983,7 +1032,7 @@ echo    4. Indsaet reference til scalar i %MICROSERVICE_NAME%.Api\program.cs (ap
 echo    5. Opret multi startup profil hvis dette onskes
 if %ASPIRESUPPORT%==1 (
 echo    6. Indsaet reference til Api i Aspire AppHost
-)		
+)
 echo.
 exit /b
 
