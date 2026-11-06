@@ -434,7 +434,7 @@ mkdir src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.ApplicationLib\Extensions 2>nu
 
 REM InfrastructureLib
 mkdir src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.InfrastructureLib\Persistence 2>nul
-mkdir src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.InfrastructureLib\Persistence\EF_Configurations 2>nul
+mkdir src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.InfrastructureLib\Persistence\Configurations 2>nul
 mkdir src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.InfrastructureLib\Repositories 2>nul
 mkdir src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.InfrastructureLib\QueryHandlers 2>nul
 mkdir src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.InfrastructureLib\Extensions 2>nul
@@ -574,10 +574,10 @@ echo // Placeholder - erstattes med faktisk kode
 
 REM InfrastructureLib
 (
-echo namespace %MICROSERVICE_NAME%.InfrastructureLib.Persistence.EF_Configurations;
+echo namespace %MICROSERVICE_NAME%.InfrastructureLib.Persistence.Configurations;
 echo.
 echo // Placeholder - erstattes med faktisk kode
-) > src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.InfrastructureLib\Persistence\EF_Configurations\dummy.cs
+) > src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.InfrastructureLib\Persistence\Configurations\dummy.cs
 (
 echo namespace %MICROSERVICE_NAME%.InfrastructureLib.Repositories;
 echo.
@@ -818,7 +818,7 @@ mkdir src\%PROJ_NAME%.ApplicationLib\Repositories 2>nul
 
 REM InfrastructureLib
 mkdir src\%PROJ_NAME%.InfrastructureLib\Persistence 2>nul
-mkdir src\%PROJ_NAME%.InfrastructureLib\Persistence\EF_Configurations 2>nul
+mkdir src\%PROJ_NAME%.InfrastructureLib\Persistence\Configurations 2>nul
 mkdir src\%PROJ_NAME%.InfrastructureLib\Repositories 2>nul
 mkdir src\%PROJ_NAME%.InfrastructureLib\QueryHandlers 2>nul
 exit /b
@@ -883,10 +883,10 @@ echo // Placeholder - erstattes med faktisk kode
 
 REM InfrastructureLib
 (
-echo namespace %PROJ_NAME%.InfrastructureLib.Persistence.EF_Configurations;
+echo namespace %PROJ_NAME%.InfrastructureLib.Persistence.Configurations;
 echo.
 echo // Placeholder - erstattes med faktisk kode
-) > src\%PROJ_NAME%.InfrastructureLib\Persistence\EF_Configurations\dummy.cs
+) > src\%PROJ_NAME%.InfrastructureLib\Persistence\Configurations\dummy.cs
 (
 echo namespace %PROJ_NAME%.InfrastructureLib.Repositories;
 echo.
