@@ -391,17 +391,17 @@ echo.
 echo Installerer NuGet-pakker...
 
 REM Infrastructure: EF Core 10 + Dapr hvis ønsket
-dotnet add src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.InfrastructureLib\%MICROSERVICE_NAME%.InfrastructureLib.csproj package Microsoft.EntityFrameworkCore
-dotnet add src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.InfrastructureLib\%MICROSERVICE_NAME%.InfrastructureLib.csproj package Microsoft.EntityFrameworkCore.SqlServer
-dotnet add src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.InfrastructureLib\%MICROSERVICE_NAME%.InfrastructureLib.csproj package Microsoft.EntityFrameworkCore.Tools´
+dotnet add src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.InfrastructureLib\%MICROSERVICE_NAME%.InfrastructureLib.csproj package Microsoft.EntityFrameworkCore --version 10.0.15
+dotnet add src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.InfrastructureLib\%MICROSERVICE_NAME%.InfrastructureLib.csproj package Microsoft.EntityFrameworkCore.SqlServer --version 10.0.15
+dotnet add src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.InfrastructureLib\%MICROSERVICE_NAME%.InfrastructureLib.csproj package Microsoft.EntityFrameworkCore.Tools --version 10.0.15
 dotnet add src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.InfrastructureLib\%MICROSERVICE_NAME%.InfrastructureLib.csproj package Dapr.AspNetCore
 
 
-REM Api: OpenApi + Scalar + EF Core Design + Dapr hvis ønsket
+REM Api: OpenApi + Scalar + EF Core Design 10 + Dapr hvis ønsket
 dotnet add src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.Api\%MICROSERVICE_NAME%.Api.csproj package Microsoft.AspNetCore.OpenApi --version 10.0.15
 dotnet add src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.Api\%MICROSERVICE_NAME%.Api.csproj package Microsoft.OpenApi -v 2.13.0
 dotnet add src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.Api\%MICROSERVICE_NAME%.Api.csproj package Scalar.AspNetCore
-dotnet add src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.Api\%MICROSERVICE_NAME%.Api.csproj package Microsoft.EntityFrameworkCore.Design
+dotnet add src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.Api\%MICROSERVICE_NAME%.Api.csproj package Microsoft.EntityFrameworkCore.Design --version 10.0.15
 dotnet add src\%MICROSERVICE_NAME%\%MICROSERVICE_NAME%.Api\%MICROSERVICE_NAME%.Api.csproj package Dapr.AspNetCore
 
 REM Tests: xunit3-template giver allerede xunit.v3 — tilfoej kun Moq til Application.Tests
