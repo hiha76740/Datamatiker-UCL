@@ -774,12 +774,13 @@ echo.
 echo Installerer Entiry Framework NuGet-pakker...
 
 REM Infrastructure: EF Core 10
-dotnet add src\%PROJ_NAME%.InfrastructureLib\%PROJ_NAME%.InfrastructureLib.csproj package Microsoft.EntityFrameworkCore
-dotnet add src\%PROJ_NAME%.InfrastructureLib\%PROJ_NAME%.InfrastructureLib.csproj package Microsoft.EntityFrameworkCore.SqlServer
-dotnet add src\%PROJ_NAME%.InfrastructureLib\%PROJ_NAME%.InfrastructureLib.csproj package Microsoft.EntityFrameworkCore.Tools
+dotnet add src\%PROJ_NAME%.InfrastructureLib\%PROJ_NAME%.InfrastructureLib.csproj package Microsoft.EntityFrameworkCore --version 10.0.15
+dotnet add src\%PROJ_NAME%.InfrastructureLib\%PROJ_NAME%.InfrastructureLib.csproj package Microsoft.EntityFrameworkCore.SqlServer --version 10.0.15
+dotnet add src\%PROJ_NAME%.InfrastructureLib\%PROJ_NAME%.InfrastructureLib.csproj package Microsoft.EntityFrameworkCore.Tools --version 10.0.15
 
 REM Api: OpenApi + Scalar
 dotnet add src\%PROJ_NAME%.Api\%PROJ_NAME%.Api.csproj package Microsoft.AspNetCore.OpenApi --version 10.0.15
+dotnet add src\%PROJ_NAME%\%PROJ_NAME%.Api.csproj package Microsoft.EntityFrameworkCore.Design --version 10.0.15
 dotnet add src\%PROJ_NAME%.Api\%PROJ_NAME%.Api.csproj package Microsoft.OpenApi -v 2.12.0
 dotnet add src\%PROJ_NAME%.Api\%PROJ_NAME%.Api.csproj package Scalar.AspNetCore
 
